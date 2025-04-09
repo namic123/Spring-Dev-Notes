@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import study.querydsl.dto.MemberSearchCondition;
+import study.querydsl.dto.MemberTeamDto;
 import study.querydsl.entity.Member;
+import study.querydsl.entity.Team;
 
 import java.util.List;
 
@@ -88,4 +91,50 @@ class MemberJpaRepositoryTest {
         List<Member> result2 = memberJpaRepository.findByUsername_Querydsl("member1");
         assertThat(result2).containsExactly(member);
     }
+
+
+    /**
+     * {@code searchTest}는 {@link MemberJpaRepository#searchByBuilder(MemberSearchCondition)}
+     * 메서드의 동적 검색 기능을 테스트합니다.
+     *
+     * 이 테스트는 팀 이름과 나이 범위 조건에 따라 {@code member4}만 검색되는지를 검증합니다.
+     *
+     * 조건:
+     *  팀 이름: "teamB"
+     *  나이: 35 이상, 40 이하
+     *
+     *
+     *기대 결과: {@code username = "member4"}인 한 명의 결과만 반환되어야 함</p>
+     */
+    @Test
+    public void searchTest() {
+        // 팀 생성 및 영속화
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        em.persist(teamA);
+        em.persist(teamB);
+
+        // 회원 4명 생성 및 팀에 배정
+        Member member1 = new Member("member1", 10, teamA); // age 10, teamA
+        Member member2 = new Member("member2", 20, teamA); // age 20, teamA
+        Member member3 = new Member("member3", 30, teamB); // age 30, teamB
+        Member member4 = new Member("member4", 40, teamB); // age 40, teamB
+        em.persist(member1);
+        em.persist(member2);
+        em.persist(member3);
+        em.persist(member4);
+
+        // 검색 조건 설정: 팀 이름 "teamB", 나이 35세 이상 40세 이하
+        MemberSearchCondition condition = new MemberSearchCondition();
+        condition.setAgeGoe(35);
+        condition.setAgeLoe(40);
+        condition.setTeamName("teamB");
+
+        // 동적 조건 기반 검색 실행
+        List<MemberTeamDto> result = memberJpaRepository.searchByBuilder(condition);
+
+        // 결과 검증: "member4"만 포함되어야 함
+        assertThat(result).extracting("username").containsExactly("member4");
+    }
+
 }
