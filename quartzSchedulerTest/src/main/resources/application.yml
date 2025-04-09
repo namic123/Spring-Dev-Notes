@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: quartzSchedulerTest
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/quartz-test
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:tables_h2.sql
+
+setting:
+  quartz:
+    file-path: quartz.properties
