@@ -2,7 +2,7 @@
 
 ### 📌 목표
 
--   앞서 만든 HelloTraceV1 로그 추적기를 **애플리케이션 코드에 직접 적용**
+-   앞서 만든 AdvanceTraceV1 로그 추적기를 **애플리케이션 코드에 직접 적용**
 -   HTTP 요청 → 컨트롤러 → 서비스 → 리포지토리의 호출 흐름을 로그로 남기고, **예외 발생 여부와 실행 시간**까지 기록
 
 ---
@@ -24,7 +24,7 @@ hello.advanced.app.v1
 
 ---
 
-## 🧩 HelloTraceV1 사용법 요약
+## 🧩 AdvanceTraceV1 사용법 요약
 
 ```
 TraceStatus status = trace.begin("메시지");
@@ -167,6 +167,6 @@ GET /v1/request?itemId=ex
 
 ## ✅ 정리
 
--   로그 추적기 V1은 수동 방식으로 추적기(HelloTraceV1)를 각 계층에 직접 삽입
+-   로그 추적기 V1은 수동 방식으로 추적기(AdvanceTraceV1)를 각 계층에 직접 삽입
 -   실행 시간 및 예외 여부를 포함해 로그를 남김으로써 기본적인 추적 기능 확보
 -   그러나 TraceId와 level이 공유되지 않아 **호출 트리 구조**를 완성하지 못함
