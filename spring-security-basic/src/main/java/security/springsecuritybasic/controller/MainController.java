@@ -1,7 +1,11 @@
 package security.springsecuritybasic.controller;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.Callable;
 
 /**
  * 필터 동작 테스트를 위한 컨트롤러.
@@ -25,6 +29,8 @@ public class MainController {
     public String before(){
         return "forward:/testfilterafter";
     }
+
+
     /**
      * /testfilterafter 요청에 대해 문자열 응답을 반환한다.
      *
@@ -33,5 +39,22 @@ public class MainController {
     @GetMapping("testfilterafter")
     public String after(){
         return "hello world";
+    }
+
+
+    @GetMapping("/async")
+    @ResponseBody
+    public Callable<String> asyncPage() {
+        // 현재 쓰레드에서 인증 정보 확인
+        System.out.println("start " + SecurityContextHolder.getContext().getAuthentication().getName());
+
+        // 비동기 쓰레드에서 수행될 로직
+        return () -> {
+            Thread.sleep(4000);
+            // 새로운 쓰레드에서도 동일한 SecurityContext 접근 가능
+            System.out.println("end " + SecurityContextHolder.getContext().getAuthentication().getName());
+
+            return "async";
+        };
     }
 }
