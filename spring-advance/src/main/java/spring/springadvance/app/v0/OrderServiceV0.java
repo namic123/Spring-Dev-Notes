@@ -1,4 +1,4 @@
-package spring.springadvance.v0;
+package spring.springadvance.app.v0;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
