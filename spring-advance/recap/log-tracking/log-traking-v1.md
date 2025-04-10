@@ -39,11 +39,11 @@
 
 ### ✨ 활용
 
--   HelloTraceV1에서 로그 시작 → TraceStatus 생성 → 종료 시 다시 사용
+-   AdvanceTraceV1에서 로그 시작 → TraceStatus 생성 → 종료 시 다시 사용
 
 ---
 
-## 🔍 3. HelloTraceV1 클래스
+## 🔍 3. AdvanceTraceV1 클래스
 
 ### 🧠 핵심 역할
 
@@ -86,7 +86,7 @@
 [796bccd9] |<X-OrderService.orderItem() time=15ms ex=IllegalStateException
 ```
 
-## ✅ 4. 테스트: HelloTraceV1Test
+## ✅ 4. 테스트: AdvanceTraceV1Test
 
 
 
@@ -102,9 +102,9 @@
 ## 📌 전체 흐름 요약
 
 1.  클라이언트 요청 발생
-2.  HelloTraceV1.begin("method명") 호출 → TraceId와 시작 시간 기록
+2.  AdvanceTraceV1.begin("method명") 호출 → TraceId와 시작 시간 기록
 3.  비즈니스 로직 수행
-4.  HelloTraceV1.end(status) 또는 exception(status, e) 호출로 로그 종료
+4.  AdvanceTraceV1.end(status) 또는 exception(status, e) 호출로 로그 종료
 5.  TraceId의 level로 들여쓰기 표현 → **호출 계층 추적 가능**
 
 ---
