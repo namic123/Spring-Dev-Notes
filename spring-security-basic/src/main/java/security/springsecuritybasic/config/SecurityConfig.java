@@ -6,25 +6,43 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
+import security.springsecuritybasic.filter.CustomGenericFilter;
+import security.springsecuritybasic.filter.CustomOnceFilter;
 
 /**
- * 단일 SecurityFilterChain을 등록하는 기본 예제
- * 모든 요청에 대해 기본 보안 설정을 적용
+ * Spring Security 필터 체인 설정 클래스.
+ * <p>
+ * 커스텀 필터(CustomGeneriFilter, CustomOnceFilter)를 필터 체인에 등록한다.
+ * </p>
+ *
+ * @author 박재성
+ * @version 1.0
+ * @since 2025-04-10
  */
 @Configuration
 @EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
     /**
-     * 기본 필터 체인 등록 (@Bean)
+     * SecurityFilterChain을 구성하여 커스텀 필터를 등록한다.
      *
      * @param http HttpSecurity 객체
-     * @return SecurityFilterChain
-     * @throws Exception 보안 설정 실패 시
+     * @return 구성된 SecurityFilterChain
+     * @throws Exception 설정 중 예외 발생 시
      */
     @Bean
-    public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
-        return http.build(); // 기본 설정만 적용됨
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http
+                .authorizeHttpRequests((auth) -> auth.anyRequest().permitAll());
+
+        http
+                .addFilterAfter(new CustomGenericFilter(), LogoutFilter.class);
+        http
+                .addFilterAfter(new CustomOnceFilter(), LogoutFilter.class);
+
+        return http.build();
     }
 
 }
