@@ -34,13 +34,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http
-                .authorizeHttpRequests((auth) -> auth.anyRequest().permitAll());
-
-        http
-                .addFilterAfter(new CustomGenericFilter(), LogoutFilter.class);
-        http
-                .addFilterAfter(new CustomOnceFilter(), LogoutFilter.class);
 
         return http.build();
     }

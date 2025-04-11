@@ -57,4 +57,8 @@ public class MainController {
             return "async";
         };
     }
+    @GetMapping
+    public void headerTest() {
+
+    }
 }
