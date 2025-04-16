@@ -1,3 +1,5 @@
+## 본 학습용 프로젝트는 김영한님의 <스프링부트 - 핵심 원리와 활용> 강의를 기반으로 작성되었습니다.
+
 # Legacy Spring Web Application (Pre-Spring Boot)
 
 이 프로젝트는 Spring Boot 도입 이전의 **전통적인 서블릿 기반 Spring 웹 애플리케이션 구조**를 다루며, WAR 파일을 생성하여 톰캣(WAS)에 배포하는 방식으로 구성되어 있습니다.
