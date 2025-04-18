@@ -12,7 +12,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration // 해당 클래스를 Spring 설정 클래스로 등록
-@EnableWebSecurity // Spring Security를 활성화하며, 내부적으로 FilterChain을 자동 구성함
+@EnableWebSecurity(debug = true) // Spring Security를 활성화하며, 내부적으로 FilterChain을 자동 구성함
 public class SecurityConfig {
 
     @Bean
@@ -53,21 +53,5 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(); // 내부적으로 솔트를 포함한 해시값 생성
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
 
-        UserDetails user1 = User.builder()
-                .username("user1")
-                .password(bCryptPasswordEncoder().encode("1234"))
-                .roles("ADMIN")
-                .build();
-
-        UserDetails user2 = User.builder()
-                .username("user2")
-                .password(bCryptPasswordEncoder().encode("1234"))
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(user1, user2);
-    }
 }
