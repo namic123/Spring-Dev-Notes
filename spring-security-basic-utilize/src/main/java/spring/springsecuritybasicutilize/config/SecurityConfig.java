@@ -21,13 +21,9 @@ public class SecurityConfig {
         // 🔐 URL 별 인가(Authorization) 규칙 설정
         http
                 .authorizeHttpRequests((auth) -> auth
-                        // "/" 또는 "/login", "/loginProc" 경로는 인증 없이 접근 허용
-                        .requestMatchers("/", "/login", "/loginProc").permitAll()
-                        // "/admin" 경로는 "ADMIN" 역할을 가진 사용자만 접근 가능
+                        .requestMatchers("/", "/login", "/loginProc", "/join", "/joinProc").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
-                        // "/my/**" 경로는 "ADMIN" 또는 "USER" 역할을 가진 사용자만 접근 가능
                         .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
-                        // 위에서 명시되지 않은 나머지 요청은 인증된 사용자만 접근 가능
                         .anyRequest().authenticated()
                 );
 
