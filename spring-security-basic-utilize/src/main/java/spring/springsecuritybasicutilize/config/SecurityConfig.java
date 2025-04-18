@@ -43,6 +43,33 @@ public class SecurityConfig {
                 .csrf((auth) -> auth.disable());
 
         // 구성된 SecurityFilterChain 반환
+
+        return http.build();
+    }
+
+    // 세션 관련 보안 설정
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+
+        // 다중 로그인 제한
+        http
+                .sessionManagement((auth) -> auth
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(true));
+        // 새로운 세션 부여
+//        http
+//                .sessionManagement((session) - session
+//                        .sessionFixation((sessionFixation) -> sessionFixation
+//                                .newSession()
+//                        )
+//                );
+
+
+        // 세션 ID 변경
+        http
+                .sessionManagement((auth) -> auth
+                        .sessionFixation().changeSessionId());
+
         return http.build();
     }
 

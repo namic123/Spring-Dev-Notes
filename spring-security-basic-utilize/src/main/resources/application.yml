@@ -5,6 +5,10 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+  servlet:
+    session:
+#      timeout: 1800  // 초 기반
+       timeout: 90m   #  // 분 기반
   jpa:
     hibernate:
       ddl-auto: create
