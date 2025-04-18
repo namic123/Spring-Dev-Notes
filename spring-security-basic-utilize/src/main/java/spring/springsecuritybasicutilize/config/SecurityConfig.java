@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration // 해당 클래스를 Spring 설정 클래스로 등록
@@ -43,5 +44,12 @@ public class SecurityConfig {
 
         // 구성된 SecurityFilterChain 반환
         return http.build();
+    }
+
+    // 🔐 BCryptPasswordEncoder Bean 등록
+    // 스프링 시큐리티의 로그인 인증 시, 입력한 비밀번호를 해시하여 DB의 해시값과 비교할 때 사용
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder(); // 내부적으로 솔트를 포함한 해시값 생성
     }
 }
