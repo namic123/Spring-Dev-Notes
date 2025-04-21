@@ -1,10 +1,12 @@
 package spring.springsecurityjwt.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 import spring.springsecurityjwt.dto.JoinDTO;
 import spring.springsecurityjwt.entity.UserEntity;
 import spring.springsecurityjwt.repository.UserRepository;
 
+@Service
 public class JoinService {
 
     private final UserRepository userRepository;
