@@ -59,7 +59,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
 
         //응답 설정
-        response.setHeader("access", access);
+        response.setHeader("Authorization", access);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
     }
