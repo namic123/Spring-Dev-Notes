@@ -58,13 +58,12 @@ public class SecurityConfig {
 
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
-                        configuration.setAllowedMethods(Collections.singletonList("*"));
-                        configuration.setAllowCredentials(true);
-                        configuration.setAllowedHeaders(Collections.singletonList("*"));
-                        configuration.setMaxAge(3600L);
-
-                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000")); // 허용 도메인
+                        configuration.setAllowedMethods(Collections.singletonList("*")); // 모든 HTTP 메서드 허용 (GET, POST, PUT 등)
+                        configuration.setAllowCredentials(true); // 자격 증명 허용 (쿠키, 인증 헤더 포함 허용)
+                        configuration.setAllowedHeaders(Collections.singletonList("*")); // 모든 헤더 허용
+                        configuration.setMaxAge(3600L); // CORS preflight 요청 결과 캐시 시간(초)
+                        configuration.setExposedHeaders(Collections.singletonList("Authorization")); // 응답에 노출시킬 헤더 지정
 
                         return configuration;
                     }
