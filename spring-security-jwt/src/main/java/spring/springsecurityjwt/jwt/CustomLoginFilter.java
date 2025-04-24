@@ -4,6 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,21 +14,20 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import spring.springsecurityjwt.dto.CustomUserDetails;
+import spring.springsecurityjwt.entity.RefreshEntity;
+import spring.springsecurityjwt.repository.RefreshRepository;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
-
+@RequiredArgsConstructor
 public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
 
     private final JWTUtil jwtUtil;
+    private RefreshRepository refreshRepository;
 
-    public CustomLoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
-
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
-    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -58,6 +59,9 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         String access = jwtUtil.createJwt("access", username, role, 600000L);
         String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
 
+        //Refresh 토큰 저장
+        addRefreshEntity(username, refresh, 86400000L);
+
         //응답 설정
         response.setHeader("Authorization","Bearer " + access);
         response.addCookie(jwtUtil.createCookie("refresh", refresh));
@@ -69,6 +73,16 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
         response.setStatus(401);
     }
+    private void addRefreshEntity(String username, String refresh, Long expiredMs) {
 
+        Date date = new Date(System.currentTimeMillis() + expiredMs);
+
+        RefreshEntity refreshEntity = new RefreshEntity();
+        refreshEntity.setUsername(username);
+        refreshEntity.setRefresh(refresh);
+        refreshEntity.setExpiration(date.toString());
+
+        refreshRepository.save(refreshEntity);
+    }
 
 }
