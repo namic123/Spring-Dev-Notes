@@ -11,11 +11,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import spring.springsecurityjwt.jwt.CustomLoginFilter;
+import spring.springsecurityjwt.jwt.CustomLogoutFilter;
 import spring.springsecurityjwt.jwt.JWTFilter;
 import spring.springsecurityjwt.jwt.JWTUtil;
+import spring.springsecurityjwt.repository.RefreshRepository;
 
 import java.util.Collections;
 
@@ -27,6 +30,8 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
 
     private final JWTUtil jwtUtil;
+
+    private RefreshRepository refreshRepository;
 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
 
@@ -90,7 +95,8 @@ public class SecurityConfig {
                 // jwtUtil 인수 전달
         http
                 .addFilterAt(new CustomLoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
-
+        http
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
