@@ -1,6 +1,7 @@
 package spring.springsecurityjwt.config;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +22,7 @@ import spring.springsecurityjwt.jwt.JWTUtil;
 import spring.springsecurityjwt.repository.RefreshRepository;
 
 import java.util.Collections;
-
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -33,11 +34,6 @@ public class SecurityConfig {
 
     private RefreshRepository refreshRepository;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
-
-        this.authenticationConfiguration = authenticationConfiguration;
-        this.jwtUtil = jwtUtil;
-    }
 
     //AuthenticationManager Bean 등록
     @Bean
