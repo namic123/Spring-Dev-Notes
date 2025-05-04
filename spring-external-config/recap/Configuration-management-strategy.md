@@ -187,7 +187,97 @@ password=prod_pw
 
 테스트 진행 전 dev, prod를 삭제하고 위 내부 파일 분리 방식과 똑같이 테스트해보면 각 프로필로 분리되어 값이 전달되는 것을 확인할 수 있다.
 
-## 5\. 마무리 정리
+#### **프로필이 없으면 어떻게 될까?**
+
+```
+spring.config.activate.on-profile=dev
+url=dev.db.com
+username=dev_user
+password=dev_pw
+#---
+spring.config.activate.on-profile=prod
+url=prod.db.com
+username=prod_user
+password=prod_pw
+```
+
+위와 같은 구조에서 --spring.profiles.active=dev 같은 실행 옵션을 지정하지 않으면, 어떤 프로필도 활성화되지 않는다. 그 결과 Environment.getProperty("url") 같은 메서드는 null을 반환하게 된다.
+
+```
+No active profile set, falling back to 1 default profile: "default"
+env url=null
+env username=null
+env password=null
+```
+
+Spring은 기본적으로 default라는 이름의 프로필을 자동 활성화한다. 그러나 이 default는 우리가 별도로 설정하지 않았다면 실제로 아무 설정도 포함하지 않는다.
+
+#### **Spring Boot의 설정 적용 순서**
+
+하나의 application.properties 파일에 기본 설정과 프로필별 설정을 함께 구성할 수도 있다
+
+```
+url=local.db.com
+username=local_user
+password=local_pw
+#---
+spring.config.activate.on-profile=dev
+url=dev.db.com
+username=dev_user
+password=dev_pw
+#---
+spring.config.activate.on-profile=prod
+url=prod.db.com
+username=prod_user
+password=prod_pw
+```
+
+-   프로필이 지정되지 않으면, 위의 기본값이 그대로 적용된다.
+-   \--spring.profiles.active=dev가 적용되면 dev 섹션의 값이 기존 값을 **덮어씌운다**.
+-   \--spring.profiles.active=prod일 경우, prod 섹션의 값이 반영된다.
+
+#### **논리 문서의 해석 방식과 일부 속성 덮어쓰기**
+
+Spring은 application.properties를 **위에서 아래로** 순차적으로 읽어 적용한다. 이때 기존에 읽은 값이 있더라도 **우선순위가 높거나 더 아래에 위치한 값**이 있다면 이를 **덮어쓴다**.
+
+```
+url=local.db.com
+username=local_user
+password=local_pw
+#---
+spring.config.activate.on-profile=dev
+url=dev.db.com
+#---
+url=hello.db.com
+```
+
+만약 dev 프로필이 활성화되어 있다면, 적용 순서는 다음과 같다.
+
+1.  local.db.com, local\_user, local\_pw 적용
+2.  url=dev.db.com 덮어쓰기 (dev 프로필 활성화 시)
+3.  마지막 url=hello.db.com → **항상 덮어씌움** (프로필 없음)
+
+**실행 결과**
+
+```
+url=hello.db.com
+username=dev_user
+password=dev_pw
+```
+
+## 5\. 설정방식의 우선순위
+
+### 외부 설정의 우선순위 (위 → 아래, 아래일수록 우선)
+
+1.  application.properties (JAR 내부)
+2.  application-{profile}.properties (JAR 내부)
+3.  application.properties (JAR 외부)
+4.  application-{profile}.properties (JAR 외부)
+5.  OS 환경 변수 (System.getenv())
+6.  자바 시스템 속성 (-Dkey=value)
+7.  커맨드라인 옵션 인수 (--key=value)
+
+## 6\. 마무리 정리
 
 Spring Boot의 외부 설정 전략은 유연성과 유지보수성을 고려하여 다양한 방식을 제공하고 있다. 설정값을 어디에 두는지에 따라 접근 방법이 달라졌던 기존 문제를, Environment와 PropertySource라는 일관된 추상화를 통해 해결하고 있으며, 개발자는 오직 env.getProperty("key") 하나로 모든 설정에 접근할 수 있다
 
@@ -197,4 +287,4 @@ Spring Boot의 외부 설정 전략은 유연성과 유지보수성을 고려하
 | --- | --- | --- | --- |
 | **외부 설정 파일** | 서버마다 설정 파일 따로 관리 | 설정 분리, JAR 파일은 고정 | 서버별 설정이 명확히 나뉘는 경우 |
 | **내부 파일 분리** | 설정을 JAR 내부에 포함 | 프로필별 파일 관리 | CI/CD 파이프라인, 설정 버전 관리 필요 시 |
-| **내부 파일 합체** | 한 파일에 모든 설정 통합 | 논리적 분리, 가독성 좋음 | 설정이 많지 않은 경우, 관리 통합 필요 시 |
+| **내부 파일 합체** | 한 파일에 모든 설정 통합 | 논리적 분리, 가독성 좋음 | 설정이 많지 않은 경우, 관리 통합 필요 시 || **내부 파일 합체** | 한 파일에 모든 설정 통합 | 논리적 분리, 가독성 좋음 | 설정이 많지 않은 경우, 관리 통합 필요 시 |
