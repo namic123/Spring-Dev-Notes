@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Data
-@ConfigurationProperties("my.datasource") // properties에 정의된 요소를 지정
+@ConfigurationProperties("my.datasource")
 public class MyDataSourcePropertiesV1 {
 
     private String url;

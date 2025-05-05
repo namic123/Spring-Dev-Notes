@@ -1,7 +1,6 @@
 package hello.config;
 
 import hello.datasource.MyDataSource;
-import hello.datasource.MyDataSourcePropertiesV2;
 import hello.datasource.MyDataSourcePropertiesV3;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
