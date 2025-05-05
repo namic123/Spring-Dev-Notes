@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
 //@Import(MyDataSourceConfigV2.class)
 @Import(MyDataSourceConfigV3.class)
 @ConfigurationPropertiesScan
-@SpringBootApplication(scanBasePackages = "hello.datasource")
+@SpringBootApplication(scanBasePackages = {"hello.datasource", "hello.pay"})
 public class ExternalReadApplication {
 
     public static void main(String[] args) {
