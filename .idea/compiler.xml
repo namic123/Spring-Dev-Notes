@@ -10,5 +10,8 @@
         <module name="spring-security-basic.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="spring-security-basic" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
