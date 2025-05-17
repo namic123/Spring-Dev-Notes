@@ -18,6 +18,7 @@ public class MyDataSourceConfigV3 {
 
     @Bean
     public MyDataSource dataSource() {
+        System.out.println("MyDataSourceConfigV3.dataSource");
         return new MyDataSource(
                 properties.getUrl(),
                 properties.getUsername(),

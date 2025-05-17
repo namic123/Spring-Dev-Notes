@@ -28,6 +28,7 @@ public class MyDataSourceValueConfig {
 
     @Bean
     public MyDataSource myDataSource1() {
+        System.out.println("MyDataSourceValueConfig.myDataSource1");
         return new MyDataSource(url, username, password, maxConnection, timeout,
                 options);
     }
@@ -40,6 +41,7 @@ public class MyDataSourceValueConfig {
             @Value("${my.datasource.etc.max-connection}") int maxConnection,
             @Value("${my.datasource.etc.timeout}") Duration timeout,
             @Value("${my.datasource.etc.options}") List<String> options) {
+        System.out.println("MyDataSourceValueConfig.myDataSource2");
         return new MyDataSource(url, username, password, maxConnection, timeout,
                 options);
     }
