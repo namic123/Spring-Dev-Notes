@@ -116,11 +116,8 @@ public class ProdPayClient implements PayClient {
     }
 }
 ```
-
 #### **결제 서비스를 사용하는 비즈니스 로직**
-
 PayClient를 주입받는 OrderService는 해당 구현체가 어떤 환경에 따라 달라지더라도 **인터페이스만 사용**하므로 유연하게 동작한다.
-
 ```
 @Service
 @RequiredArgsConstructor
