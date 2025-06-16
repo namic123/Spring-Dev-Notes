@@ -3,3 +3,10 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
     enabled: true
+
+
+swagger:
+  admin:
+    username: admin
+    password: admin123
+    role: ADMIN

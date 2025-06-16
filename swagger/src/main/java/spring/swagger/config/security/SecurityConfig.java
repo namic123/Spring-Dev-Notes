@@ -21,6 +21,7 @@ public class SecurityConfig {
                 .formLogin(auth -> auth
                         .loginPage("/swagger-ui/login" )
                         .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/swagger-ui/index.html", true)
                         .permitAll()
                 );
 
