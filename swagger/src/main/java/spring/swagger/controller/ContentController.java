@@ -1,5 +1,6 @@
 package spring.swagger.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
+@Tag(name = "Content API", description = "게시글 도메인 API")
 public class ContentController {
 
     @GetMapping("/content/{id}")
