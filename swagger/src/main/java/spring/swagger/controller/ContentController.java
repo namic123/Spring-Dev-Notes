@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,10 +18,11 @@ import spring.swagger.dto.ContentResponseDTO;
 
 import java.util.Map;
 
+@Tag(name = "ContentAPI", description = "게시글 도메인 API")
 @RestController
 @RequestMapping("/api/v1")
-@Tag(name = "Content API", description = "게시글 도메인 API")
 public class ContentController {
+
     @Operation(
             summary = "게시글 Read",
             description = "게시글의 ID를 파라미터로 보내면 해당하는 게시글 조회",
@@ -48,35 +50,62 @@ public class ContentController {
             }
     )
     @GetMapping("/content/{id}")
-    public ResponseEntity<?> contentGet(@PathVariable("id") String id) {
-        Map<String, Object> responseBody = Map.of(
+    public ResponseEntity<?> contentGet(
+            @PathVariable("id")Long id
+    ){
+
+        // 무시 ContentResponseDTO.java 기반으로 응답된다고 가정
+        Map<String, Object> resultBody = Map.of(
                 "id", id,
                 "title", "제목" + id,
                 "content", "내용" + id
         );
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(new MediaType(MediaType.APPLICATION_JSON));
-
-        return new ResponseEntity<>(responseBody, httpHeaders, HttpStatus.OK);
-    }
-    @PostMapping("/content")
-    public ResponseEntity<?> contentPost(@RequestBody ContentRequestDTO dto) {
-
-        Map<String, Object> resultBody = Map.of("id", 1L);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(new MediaType(MediaType.APPLICATION_JSON));
+        httpHeaders.setContentType(new MediaType("application", "json"));
 
         return new ResponseEntity<>(resultBody, httpHeaders, HttpStatus.OK);
     }
 
-    @DeleteMapping("/content/{id}")
-    public ResponseEntity<?> contentDelete(@PathVariable("id") Long id) {
+    @Operation(
+            summary = "게시글 Create",
+            description = "게시글 작성 후 ID 반환",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "게시글 데이터",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ContentRequestDTO.class)
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "성공",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    examples = @ExampleObject(
+                                            value = "{\"id\":1}"
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "실패"
+                    )
+            }
+    )
+    @PostMapping("/content")
+    public ResponseEntity<?> contentPost(
+            @RequestBody ContentRequestDTO dto
+    ) {
+
+        Map<String, Object> resultBody = Map.of("id", 1L);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(new MediaType(MediaType.APPLICATION_JSON));
+        httpHeaders.setContentType(new MediaType("application", "json"));
 
-        return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(resultBody, httpHeaders, HttpStatus.OK);
     }
+
 }
