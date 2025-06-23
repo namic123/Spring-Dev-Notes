@@ -22,7 +22,7 @@ class MemberRepositoryV0Test {
 
         // find by Id
         Member findMember = repository.findById(member.getMemberId());
-        log.info("findMeber={}", findMember);
+        log.info("findMember={}", findMember);
         assertEquals(findMember, member);
     }
 }
