@@ -16,7 +16,7 @@ class MemberRepositoryV0Test {
     @Test
     void crud() throws SQLException {
         // save
-        Member member = new Member("memberV0", 10000);
+        Member member = new Member("memberV1", 10000);
 
         repository.save(member);
 
@@ -24,5 +24,9 @@ class MemberRepositoryV0Test {
         Member findMember = repository.findById(member.getMemberId());
         log.info("findMember={}", findMember);
         assertEquals(findMember, member);
+
+        repository.update(member.getMemberId(), 20000);
+        Member updateMember = repository.findById(member.getMemberId());
+        assertEquals(updateMember.getMoney(), 20000);
     }
 }
