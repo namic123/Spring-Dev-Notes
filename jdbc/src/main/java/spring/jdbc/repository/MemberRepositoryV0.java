@@ -41,15 +41,22 @@ public class MemberRepositoryV0 {
     }
 
     public Member findById(String memberId) throws SQLException {
-
+// 쿼리문 작성
         String sql = "select * from member where member_id = ?";
-        Connection con = null;
+       // 커넥션 및 쿼리 전달 객체, 실행 객체 정의
+ Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
+//커넥션 획득
             con = getConnection();
+// 전달 객체 생성
+
             pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, memberId);
+            // 파라미터 세팅
+pstmt.setString(1, memberId);
+// 쿼리 실행
+
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 Member member = new Member();
